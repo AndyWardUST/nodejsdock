@@ -73,20 +73,25 @@ stages:
     - job: Check
       displayName: Check
       steps:
+#        - task: SonarQubePrepare@4
+#          inputs:
+#            SonarQube: 'SonarCloud'
+#            scannerMode: 'CLI'
+#            configMode: 'manual'
+#            cliProjectKey: 'AndyWardUST_nodejsdock'
+#            cliProjectName: 'nodejsdock'
+#            cliSources: '.'
+#            extraProperties: |
+#              # Additional properties that will be passed to the scanner,
+#              # Put one key=value per line, example:
+#              sonar.organization=andywardust
+
         - task: SonarQubePrepare@4
           inputs:
             SonarQube: 'SonarCloud'
             scannerMode: 'CLI'
-            configMode: 'manual'
-            cliProjectKey: 'AndyWardUST_nodejsdock'
-            cliProjectName: 'nodejsdock'
-            cliSources: '.'
-            extraProperties: |
-              # Additional properties that will be passed to the scanner,
-              # Put one key=value per line, example:
-              sonar.organization=andywardust
-
-        
+            configMode: 'file'
+            extraProperties: 
 
         - task: SonarQubeAnalyze@4
 
