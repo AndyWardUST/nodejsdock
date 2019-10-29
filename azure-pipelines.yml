@@ -33,38 +33,39 @@ stages:
     - job: Import
       displayName: Import
       steps:
-        - task: ArtifactoryNpm@1
-          displayName: Install NPM from Artifactory
-          inputs:
-            command: 'install'
-            artifactoryService: 'jFrog'
-            sourceRepo: 'npm'
-            workingFolder: '$(System.DefaultWorkingDirectory)'
-            collectBuildInfo: true
-            threads: '1'
-            buildName: '$(Build.DefinitionName)'
-            buildNumber: '$(Build.BuildNumber)'
-            includeEnvVars: true
+#        - task: ArtifactoryNpm@1
+#          displayName: Install NPM from Artifactory
+#          inputs:
+#            command: 'install'
+#            artifactoryService: 'jFrog'
+#            sourceRepo: 'npm'
+#            workingFolder: '$(System.DefaultWorkingDirectory)'
+#            collectBuildInfo: true
+#            threads: '1'
+#            buildName: '$(Build.DefinitionName)'
+#            buildNumber: '$(Build.BuildNumber)'
+#            includeEnvVars: true
 
-        - task: ArtifactoryToolsInstaller@1
-          inputs:
-            artifactoryService: 'jFrog'
-            cliInstallationRepo: 'jfrog-cli'
+#        - task: ArtifactoryToolsInstaller@1
+#          inputs:
+#            artifactoryService: 'jFrog'
+#            cliInstallationRepo: 'jfrog-cli'
 
-        - task: UniversalPackages@0
-          inputs:
-            command: 'download'
-            downloadDirectory: '$(System.DefaultWorkingDirectory)'
-            feedsToUse: 'internal'
-            vstsFeed: '1b6067da-0716-4122-a207-73565ab42845'
-            vstsFeedPackage: 'f864f7d9-3fd7-4789-869e-1258818e3530'
-            vstsPackageVersion: '19.7.363'
+#        - task: UniversalPackages@0
+#          inputs:
+#            command: 'download'
+#            downloadDirectory: '$(System.DefaultWorkingDirectory)'
+#            feedsToUse: 'internal'
+#            vstsFeed: '1b6067da-0716-4122-a207-73565ab42845'
+#            vstsFeedPackage: 'f864f7d9-3fd7-4789-869e-1258818e3530'
+#            vstsPackageVersion: '19.7.363'
 
         - task: CmdLine@2
           inputs:
             script: |
-              sudo mv $(System.DefaultWorkingDirectory)/C:/twistlock_19_07_363/linux/twistcli /usr/bin/twistcli
-              sudo chmod +x /usr/bin/twistcli
+              sudo ls
+#              sudo mv $(System.DefaultWorkingDirectory)/C:/twistlock_19_07_363/linux/twistcli /usr/bin/twistcli
+#              sudo chmod +x /usr/bin/twistcli
 
 - stage: Check
   displayName: Check Stage
@@ -77,13 +78,13 @@ stages:
             SonarQube: 'SonarCloud'
             scannerMode: 'CLI'
             configMode: 'manual'
-            cliProjectKey: 'Eldarrin_nodejsdock'
+            cliProjectKey: 'andywardust_nodejsdock'
             cliProjectName: 'nodejsdock'
             cliSources: '.'
             extraProperties: |
               # Additional properties that will be passed to the scanner,
               # Put one key=value per line, example:
-              sonar.organization=eldarrin-github
+              sonar.organization=andywardust
 
         - task: SonarQubeAnalyze@4
 
