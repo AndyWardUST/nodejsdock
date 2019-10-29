@@ -88,7 +88,7 @@ stages:
 
         - task: SonarQubePrepare@4
           inputs:
-            SonarQube: 'SonarCloud'
+            SonarQube: 'SonarCloudOther'
             scannerMode: 'CLI'
             configMode: 'file'
             extraProperties: 
