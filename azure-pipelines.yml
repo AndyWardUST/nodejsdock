@@ -119,13 +119,13 @@ stages:
 #            buildNumber: '$(Build.BuildNumber)'
 #            includeEnvVars: true
 
-        - task: Docker@2
-          inputs:
-            containerRegistry: $(dockerRegistryServiceConnection)
-            repository: $(imageRepository)
-            command: 'build'
-            Dockerfile: '$(dockerfilePath)'
-            tags: '$(tag)'
+#        - task: Docker@2
+#          inputs:
+#            containerRegistry: $(dockerRegistryServiceConnection)
+#            repository: $(imageRepository)
+#            command: 'build'
+#            Dockerfile: '$(dockerfilePath)'
+#            tags: '$(tag)'
 
 #        - task: twistcli-scan@1
 #          inputs:
