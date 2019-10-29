@@ -33,23 +33,23 @@ stages:
     - job: Import
       displayName: Import
       steps:
-#        - task: ArtifactoryNpm@1
-#          displayName: Install NPM from Artifactory
-#          inputs:
-#            command: 'install'
-#            artifactoryService: 'jFrog'
-#            sourceRepo: 'npm'
-#            workingFolder: '$(System.DefaultWorkingDirectory)'
-#            collectBuildInfo: true
-#            threads: '1'
-#            buildName: '$(Build.DefinitionName)'
-#            buildNumber: '$(Build.BuildNumber)'
-#            includeEnvVars: true
+        - task: ArtifactoryNpm@1
+          displayName: Install NPM from Artifactory
+          inputs:
+            command: 'install'
+            artifactoryService: 'jFrog'
+            sourceRepo: 'npm'
+            workingFolder: '$(System.DefaultWorkingDirectory)'
+            collectBuildInfo: true
+            threads: '1'
+            buildName: '$(Build.DefinitionName)'
+            buildNumber: '$(Build.BuildNumber)'
+            includeEnvVars: true
 
-#        - task: ArtifactoryToolsInstaller@1
-#          inputs:
-#            artifactoryService: 'jFrog'
-#            cliInstallationRepo: 'jfrog-cli'
+        - task: ArtifactoryToolsInstaller@1
+          inputs:
+            artifactoryService: 'jFrog'
+            cliInstallationRepo: 'jfrog-cli'
 
 #        - task: UniversalPackages@0
 #          inputs:
