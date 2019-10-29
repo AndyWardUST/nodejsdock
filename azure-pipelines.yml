@@ -78,13 +78,15 @@ stages:
             SonarQube: 'SonarCloud'
             scannerMode: 'CLI'
             configMode: 'manual'
-            cliProjectKey: 'andywardust_nodejsdock'
+            cliProjectKey: 'AndyWardUST_nodejsdock'
             cliProjectName: 'nodejsdock'
             cliSources: '.'
             extraProperties: |
               # Additional properties that will be passed to the scanner,
               # Put one key=value per line, example:
               sonar.organization=andywardust
+
+        
 
         - task: SonarQubeAnalyze@4
 
