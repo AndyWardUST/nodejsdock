@@ -91,7 +91,7 @@ stages:
             SonarQube: 'SonarCloud'
             scannerMode: 'CLI'
             configMode: 'file'
-            extraProperties:
+            extraProperties: ' -X'
 
         - task: SonarQubeAnalyze@4
 
