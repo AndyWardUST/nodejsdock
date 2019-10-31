@@ -73,8 +73,8 @@ stages:
           inputs:
             script: |
               sudo ls
-#              sudo mv $(System.DefaultWorkingDirectory)/C:/twistlock_19_07_363/linux/twistcli /usr/bin/twistcli
-#              sudo chmod +x /usr/bin/twistcli
+              sudo mv $(System.DefaultWorkingDirectory)/twistcli /usr/bin/twistcli
+              sudo chmod +x /usr/bin/twistcli
 
 - stage: Check
   displayName: Check Stage
@@ -146,23 +146,23 @@ stages:
 #            buildNumber: '$(Build.BuildNumber)'
 #            includeEnvVars: true
 
-#        - task: Docker@2
-#          inputs:
-#            containerRegistry: $(dockerRegistryServiceConnection)
-#            repository: $(imageRepository)
-#            command: 'build'
-#            Dockerfile: '$(dockerfilePath)'
-#            tags: '$(tag)'
+        - task: Docker@2
+          inputs:
+            containerRegistry: $(dockerRegistryServiceConnection)
+            repository: $(imageRepository)
+            command: 'build'
+            Dockerfile: '$(dockerfilePath)'
+            tags: '$(tag)'
 
-#        - task: twistcli-scan@1
-#          inputs:
-#            scanType: 'images'
-#            twistlockService: 'twistlock_cli'
-#            vulnerabilityThreshold: 'critical'
-#            onlyFixed: false
-#            gracePeriod: '0'
-#            complianceThreshold: 'critical'
-#            artifact: '$(imageRepository):$(tag)'
+        - task: twistcli-scan@1
+          inputs:
+            scanType: 'images'
+            twistlockService: 'twistlock_cli'
+            vulnerabilityThreshold: 'critical'
+            onlyFixed: false
+            gracePeriod: '0'
+            complianceThreshold: 'critical'
+            artifact: '$(imageRepository):$(tag)'
 
 #        - task: Docker@2
 #          inputs:
