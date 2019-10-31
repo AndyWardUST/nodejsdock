@@ -86,18 +86,18 @@ stages:
 #              # Put one key=value per line, example:
 #              sonar.organization=andywardust
 
-#        - task: SonarQubePrepare@4
-#          inputs:
-#            SonarQube: 'SonarCloud'
-#            scannerMode: 'CLI'
-#            configMode: 'file'
-#            extraProperties: 
+        - task: SonarQubePrepare@4
+          inputs:
+            SonarQube: 'SonarCloud'
+            scannerMode: 'CLI'
+            configMode: 'file'
+            extraProperties:
 
-#        - task: SonarQubeAnalyze@4
+        - task: SonarQubeAnalyze@4
 
-#        - task: SonarQubePublish@4
-#          inputs:
-#            pollingTimeoutSec: '300'
+        - task: SonarQubePublish@4
+          inputs:
+            pollingTimeoutSec: '300'
 
         - script: |
             npm install
@@ -107,13 +107,13 @@ stages:
             npm run-script build
           displayName: 'npm test and build'
 
-        - task: Security static source code analysis@88
-          inputs:
-            CheckmarxService: 'CheeckMarxSchroders'
-            projectName: 'nodejsdock'
-            preset: 'Checkmarx Default'
-            fullTeamName: 'CxServer\ASA\UST-Global\UST-POC'
-            incScan: true
+#        - task: Security static source code analysis@88
+#          inputs:
+#            CheckmarxService: 'CheeckMarxSchroders'
+#            projectName: 'nodejsdock'
+#            preset: 'Checkmarx Default'
+#            fullTeamName: 'CxServer\ASA\UST-Global\UST-POC'
+#            incScan: true
 
 - stage: Build
   displayName: Build Stage
