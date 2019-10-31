@@ -8,7 +8,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'centos-latest'
+  vmImage: 'ubuntu-latest'
 
 resources:
   - repo: self
@@ -24,7 +24,7 @@ variables:
   imagePullSecret: 'zulucontainerregistry6327d626-auth'
 
   # Agent VM image name
-  vmImageName: 'centos-latest'
+  vmImageName: 'ubuntu-latest'
 
 stages:
 - stage: Import
