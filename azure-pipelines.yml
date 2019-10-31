@@ -100,6 +100,7 @@ stages:
 #            pollingTimeoutSec: '300'
 
         - script: |
+            npm test
             npm run-script build
           displayName: 'npm test and build'
 
