@@ -24,7 +24,7 @@ variables:
   imagePullSecret: 'zulucontainerregistry6327d626-auth'
 
   # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+  vmImageName: 'centos-latest'
 
 stages:
 - stage: Import
