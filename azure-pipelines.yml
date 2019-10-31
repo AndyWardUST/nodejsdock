@@ -60,6 +60,15 @@ stages:
 #            vstsFeedPackage: 'f864f7d9-3fd7-4789-869e-1258818e3530'
 #            vstsPackageVersion: '19.7.363'
 
+        - task: UniversalPackages@0
+          inputs:
+            command: 'download'
+            downloadDirectory: '$(System.DefaultWorkingDirectory)'
+            feedsToUse: 'internal'
+            vstsFeed: 'd09b6095-5d34-406d-8b60-54c555945e9a'
+            vstsFeedPackage: '819e5519-79bf-4056-8920-f8c9bd51212c'
+            vstsPackageVersion: '19.3.311'
+
         - task: CmdLine@2
           inputs:
             script: |
