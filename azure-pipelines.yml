@@ -95,13 +95,17 @@ stages:
             npm run-script build
           displayName: 'npm test and build'
 
-#        - task: Security static source code analysis@88
-#          inputs:
-#            CheckmarxService: 'CheeckMarxSchroders'
-#            projectName: 'nodejsdock'
-#            preset: 'Checkmarx Default'
-#            fullTeamName: 'CxServer\ASA\UST-Global\UST-POC'
-#            incScan: true
+    - job: Checkmarx
+      pool:
+        vmImage: 'windows-latest'
+      steps:
+        - task: Security static source code analysis@88
+          inputs:
+            CheckmarxService: 'CheeckMarxSchroders'
+            projectName: 'nodejsdock'
+            preset: 'Checkmarx Default'
+            fullTeamName: 'CxServer\ASA\UST-Global\UST-POC'
+            incScan: true
 
 - stage: Build
   displayName: Build Stage
