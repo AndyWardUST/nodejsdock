@@ -29,8 +29,8 @@ stages:
 - stage: Import
   displayName: Import Requirements
   jobs:
-    - job: jFrog Import
-      displayName: Import
+    - job: Import
+      displayName: jFrog Import
       steps:
 #        - task: ArtifactoryNpm@1
 #          displayName: Install NPM from Artifactory
