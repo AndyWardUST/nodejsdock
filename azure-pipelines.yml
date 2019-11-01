@@ -69,11 +69,11 @@ stages:
             extraProperties:
 
 # This will not work without UST Global allowing sonarcloud access to organisation
-#        - task: SonarQubeAnalyze@4
+        - task: SonarQubeAnalyze@4
 
-#        - task: SonarQubePublish@4
-#          inputs:
-#            pollingTimeoutSec: '300'
+        - task: SonarQubePublish@4
+          inputs:
+            pollingTimeoutSec: '300'
 
         - script: |
             npm install
