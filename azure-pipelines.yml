@@ -29,7 +29,7 @@ stages:
 - stage: Import
   displayName: Import Requirements
   jobs:
-    - job: Import
+    - job: jFrog Import
       displayName: Import
       steps:
 #        - task: ArtifactoryNpm@1
@@ -59,7 +59,7 @@ stages:
   displayName: Check Stage
   jobs:
     - job: Check
-      displayName: Check
+      displayName: Code Check
       steps:
         - task: SonarQubePrepare@4
           inputs:
