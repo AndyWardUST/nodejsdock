@@ -16,12 +16,11 @@ resources:
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '591568c9-fdc7-46e6-a1f2-0533e1ac1686'
-  imageRepository: 'ustpoc-docker.jfrog.io/deepsea'
-  containerRegistry: 'zulucontainerregistry.azurecr.io'
+  imageRepository: 'nodesjsdock'
+  containerRegistry: 'pocschrodersregistry.azurecr.io'
   dockerfilePath: 'Dockerfile'
   tag: '$(Build.BuildId)'
-  imagePullSecret: 'zulucontainerregistry6327d626-auth'
+  imagePullSecret: 'TBA'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -62,19 +61,6 @@ stages:
     - job: Check
       displayName: Check
       steps:
-#        - task: SonarQubePrepare@4
-#          inputs:
-#            SonarQube: 'SonarCloud'
-#            scannerMode: 'CLI'
-#            configMode: 'manual'
-#            cliProjectKey: 'AndyWardUST_nodejsdock'
-#            cliProjectName: 'nodejsdock'
-#            cliSources: '.'
-#            extraProperties: |
-#              # Additional properties that will be passed to the scanner,
-#              # Put one key=value per line, example:
-#              sonar.organization=andywardust
-
         - task: SonarQubePrepare@4
           inputs:
             SonarQube: 'SonarCloud'
@@ -82,6 +68,7 @@ stages:
             configMode: 'file'
             extraProperties:
 
+# This will not work without UST Global allowing sonarcloud access to organisation
 #        - task: SonarQubeAnalyze@4
 
 #        - task: SonarQubePublish@4
@@ -93,21 +80,21 @@ stages:
             curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
             java -jar wss-unified-agent.jar
             npm test
-            npm run-script sonar-scanner-lin
             npm run-script build
           displayName: 'npm test and build'
 
-    - job: Checkmarx
-      pool:
-        vmImage: 'windows-latest'
-      steps:
-        - task: Security static source code analysis@88
-          inputs:
-            CheckmarxService: 'CheeckMarxSchroders'
-            projectName: 'nodejsdock'
-            preset: 'Checkmarx Default'
-            fullTeamName: 'CxServer\ASA\UST-Global\UST-POC'
-            incScan: true
+# This will not work without IP resolution to Schroders being fixed
+#    - job: Checkmarx
+#      pool:
+#        vmImage: 'windows-latest'
+#      steps:
+#        - task: Security static source code analysis@88
+#          inputs:
+#            CheckmarxService: 'CheeckMarxSchroders'
+#            projectName: 'nodejsdock'
+#            preset: 'Checkmarx Default'
+#            fullTeamName: 'CxServer\ASA\UST-Global\UST-POC'
+#            incScan: true
 
 - stage: Build
   displayName: Build Stage
@@ -154,6 +141,7 @@ stages:
               sudo mv $(System.DefaultWorkingDirectory)/twistcli /usr/bin/twistcli
               sudo chmod +x /usr/bin/twistcli
 
+# This will fail until CVE in base docker image is resolved
         - task: twistcli-scan@1
           inputs:
             scanType: 'images'
@@ -171,8 +159,8 @@ stages:
 #            command: 'push'
 #            tags: '$(tag)'
 
-        - upload: manifests
-          artifact: manifests
+#        - upload: manifests
+#          artifact: manifests
 
         - task: CmdLine@2
           inputs:
