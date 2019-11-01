@@ -54,6 +54,7 @@ stages:
           inputs:
             script: |
               sudo ls
+              curl ifconfig.co
 
 - stage: Check
   displayName: Check Stage
