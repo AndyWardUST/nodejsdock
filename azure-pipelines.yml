@@ -62,14 +62,12 @@ stages:
     - job: Check
       displayName: Code Check
       steps:
-
         - task: SonarCloudPrepare@1
           inputs:
             SonarCloud: 'SonarCloud'
             organization: 'ustpocschroders'
-            scannerMode: 'MSBuild'
-            projectKey: 'ustandykey'
-            projectName: 'nodejsdock'
+            scannerMode: 'CLI'
+            configMode: 'file'
 
 # This will not work without UST Global allowing sonarcloud access to organisation
         - task: SonarCloudAnalyze@1
@@ -79,6 +77,7 @@ stages:
             pollingTimeoutSec: '300'
 
         - script: |
+            npm install
             curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
             java -jar wss-unified-agent.jar
             npm test
