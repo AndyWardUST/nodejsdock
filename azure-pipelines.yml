@@ -62,17 +62,19 @@ stages:
     - job: Check
       displayName: Code Check
       steps:
-        - task: SonarQubePrepare@4
+
+        - task: SonarCloudPrepare@1
           inputs:
-            SonarQube: 'SonarCloud'
-            scannerMode: 'CLI'
-            configMode: 'file'
-            extraProperties:
+            SonarCloud: 'SonarCloud'
+            organization: 'ustpocschroders'
+            scannerMode: 'MSBuild'
+            projectKey: 'ustandykey'
+            projectName: 'nodejsdock'
 
 # This will not work without UST Global allowing sonarcloud access to organisation
-        - task: SonarQubeAnalyze@4
+        - task: SonarCloudAnalyze@1
 
-        - task: SonarQubePublish@4
+        - task: SonarCloudPublish@1
           inputs:
             pollingTimeoutSec: '300'
 
