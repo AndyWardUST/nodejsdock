@@ -65,12 +65,12 @@ stages:
         - task: SonarCloudPrepare@1
           inputs:
             SonarCloud: 'SonarCloud'
-            organization: 'ustpocschroders'
+            organization: 'andywardust'
             scannerMode: 'CLI'
             configMode: 'file'
 
 # This will not work without UST Global allowing sonarcloud access to organisation
-#        - task: SonarCloudAnalyze@1
+        - task: SonarCloudAnalyze@1
 
 #        - task: SonarCloudPublish@1
 #          inputs:
