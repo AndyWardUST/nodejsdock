@@ -173,3 +173,10 @@ stages:
             buildNumber: '$(Build.BuildNumber)'
             includeEnvVars: true
         
+        - task: OctopusDeployRelease@4
+          inputs:
+            OctoConnectedServiceName: 'OctopusDeploy'
+            Space: 'Spaces-1'
+            Project: 'Projects-1'
+            ReleaseNumber: 'latest'
+            Environments: 'Environments-1'
