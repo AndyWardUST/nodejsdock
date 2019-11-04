@@ -70,14 +70,13 @@ stages:
             extraProperties:
 
 # This will not work without UST Global allowing sonarcloud access to organisation
-        - task: SonarQubeAnalyze@4
+#        - task: SonarQubeAnalyze@4
 
-        - task: SonarQubePublish@4
-          inputs:
-            pollingTimeoutSec: '300'
+#        - task: SonarQubePublish@4
+#          inputs:
+#            pollingTimeoutSec: '300'
 
         - script: |
-            npm install
             curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
             java -jar wss-unified-agent.jar
             npm test
