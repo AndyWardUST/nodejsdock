@@ -111,10 +111,6 @@ stages:
             artifactoryService: 'jFrog'
             sourceRepo: 'docker'
             imageName: 'ustpoc-docker.jfrog.io/node:latest'
-            collectBuildInfo: true
-            buildName: '$(Build.DefinitionName)'
-            buildNumber: '$(Build.BuildNumber)'
-            includeEnvVars: true
 
         - task: Docker@2
           inputs:
