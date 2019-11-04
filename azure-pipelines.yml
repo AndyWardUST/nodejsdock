@@ -72,9 +72,9 @@ stages:
 # This will not work without UST Global allowing sonarcloud access to organisation
         - task: SonarCloudAnalyze@1
 
-        - task: SonarCloudPublish@1
-          inputs:
-            pollingTimeoutSec: '300'
+#        - task: SonarCloudPublish@1
+#          inputs:
+#            pollingTimeoutSec: '300'
 
         - script: |
             curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
@@ -105,18 +105,16 @@ stages:
       pool:
         vmImage: $(vmImageName)
       steps:
-
-
-#        - task: ArtifactoryDocker@1
-#          inputs:
-#            command: 'pull'
-#            artifactoryService: 'jFrog'
-#            sourceRepo: 'docker'
-#            imageName: 'ustpoc-docker.jfrog.io/centos'
-#            collectBuildInfo: true
-#            buildName: '$(Build.DefinitionName)'
-#            buildNumber: '$(Build.BuildNumber)'
-#            includeEnvVars: true
+        - task: ArtifactoryDocker@1
+          inputs:
+            command: 'pull'
+            artifactoryService: 'jFrog'
+            sourceRepo: 'docker'
+            imageName: 'ustpoc-docker.jfrog.io/node:latest'
+            collectBuildInfo: true
+            buildName: '$(Build.DefinitionName)'
+            buildNumber: '$(Build.BuildNumber)'
+            includeEnvVars: true
 
         - task: Docker@2
           inputs:
