@@ -72,9 +72,9 @@ stages:
 # This will not work without UST Global allowing sonarcloud access to organisation
         - task: SonarCloudAnalyze@1
 
-#        - task: SonarCloudPublish@1
-#          inputs:
-#            pollingTimeoutSec: '300'
+        - task: SonarCloudPublish@1
+          inputs:
+            pollingTimeoutSec: '300'
 
         - script: |
             curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
