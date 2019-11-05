@@ -1,9 +1,3 @@
-# Node.js
-
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
 trigger:
 - master
 
@@ -15,12 +9,9 @@ resources:
 
 variables:
 
-  # Container registry service connection established during pipeline creation
   imageRepository: 'ustpoc-docker-local.jfrog.io/nodesjsdock'
-  containerRegistry: 'pocschrodersregistry.azurecr.io'
   dockerfilePath: 'Dockerfile'
   tag: '$(Build.BuildId)'
-  imagePullSecret: 'TBA'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -46,15 +37,10 @@ stages:
             includeEnvVars: true
 
         - task: ArtifactoryToolsInstaller@1
+          displayName: Install jFrog Client from Artifactory
           inputs:
             artifactoryService: 'jFrog'
             cliInstallationRepo: 'jfrog-cli'
-
-        - task: CmdLine@2
-          inputs:
-            script: |
-              sudo ls
-              curl ifconfig.co
 
 - stage: Check
   displayName: Check Stage
@@ -69,7 +55,6 @@ stages:
             scannerMode: 'CLI'
             configMode: 'file'
 
-# This will not work without UST Global allowing sonarcloud access to organisation
         - task: SonarCloudAnalyze@1
 
         - task: SonarCloudPublish@1
@@ -131,7 +116,6 @@ stages:
         - task: CmdLine@2
           inputs:
             script: |
-              sudo ls
               sudo mv $(System.DefaultWorkingDirectory)/twistcli /usr/bin/twistcli
               sudo chmod +x /usr/bin/twistcli
 
@@ -146,22 +130,8 @@ stages:
             complianceThreshold: 'critical'
             artifact: '$(imageRepository):$(tag)'
 
-#        - task: Docker@2
-#          inputs:
-#            containerRegistry: $(dockerRegistryServiceConnection)
-#            repository: '$(imageRepository)'
-#            command: 'push'
-#            tags: '$(tag)'
-
 #        - upload: manifests
 #          artifact: manifests
-
-        - task: CmdLine@2
-          inputs:
-            script: |
-              sudo ls
-              sudo docker images
-              sudo export TESTERVAR="test value"
 
         - task: ArtifactoryDocker@1
           inputs:
