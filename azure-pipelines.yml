@@ -92,12 +92,12 @@ stages:
       pool:
         vmImage: $(vmImageName)
       steps:
-#        - task: ArtifactoryDocker@1
-#          inputs:
-#            command: 'pull'
-#            artifactoryService: 'jFrog'
-#            sourceRepo: 'docker'
-#            imageName: 'ustpoc-docker.jfrog.io/node:latest'
+        - task: ArtifactoryDocker@1
+          inputs:
+            command: 'pull'
+            artifactoryService: 'jFrog'
+            sourceRepo: 'docker'
+            imageName: 'ustpoc-docker.jfrog.io/node:latest'
 
         - task: Docker@2
           inputs:
@@ -131,6 +131,15 @@ stages:
             complianceThreshold: 'critical'
             artifact: '$(imageRepository):$(tag)'
 
+#        - upload: manifests
+#          artifact: manifests
+
+- stage: Gather
+  displayName: Gather Results
+  dependsOn: Build
+  jobs:
+    - job: getSonarAPI
+      steps:
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
@@ -151,31 +160,28 @@ stages:
               throw "Quality gate failed"
               }
 
+- stage: Push
+  displayName: Push Results
+  dependsOn: Gather
+  jobs:
+    - job: PushBuildResults
+      steps:
+        - task: ArtifactoryDocker@1
+          inputs:
+            command: 'push'
+            artifactoryService: 'jFrog'
+            targetRepo: 'docker-local'
+            imageName: '$(imageRepository):$(tag)'
+            collectBuildInfo: true
+            buildName: '$(Build.DefinitionName)'
+            buildNumber: '$(Build.BuildNumber)'
+            includeEnvVars: true
+
         - task: ArtifactoryPublishBuildInfo@1
           inputs:
             artifactoryService: 'jFrog'
             buildName: '$(Build.DefinitionName)'
             buildNumber: '$(Build.BuildNumber)'
-
-#        - upload: manifests
-#          artifact: manifests
-
-#        - task: ArtifactoryDocker@1
-#          inputs:
-#            command: 'push'
-#            artifactoryService: 'jFrog'
-#            targetRepo: 'docker-local'
-#            imageName: '$(imageRepository):$(tag)'
-#            collectBuildInfo: true
-#            buildName: '$(Build.DefinitionName)'
-#            buildNumber: '$(Build.BuildNumber)'
-#            includeEnvVars: true
-        
-#        - task: ArtifactoryPublishBuildInfo@1
-#          inputs:
-#            artifactoryService: 'jFrog'
-#            buildName: '$(Build.DefinitionName)'
-#            buildNumber: '$(Build.BuildNumber)'
 
 #        - task: OctopusCreateRelease@4
 #          inputs:
@@ -185,32 +191,3 @@ stages:
 #            Channel: 'Channels-1'
 #            DeployToEnvironment: 'Environments-1'
 #            DeploymentProgress: true
-
-#- stage: Gather
-#  displayName: Gather Results
-#  dependsOn: Build
-#  jobs:
-#    - job: getSonarAPI
-#      steps:
-
-#- stage: Push
-#  displayName: Push Results
-#  dependsOn: Gather
-#  jobs:
-#    - job: PushBuildResults
-#      steps:
-
-
-#      pool: server
-#      steps:
-#        - task: InvokeRESTAPI@1
-#          inputs:
-#            connectionType: 'connectedServiceName'
-#            serviceConnection: 'SonarCloudAPI'
-#            method: 'GET'
-#            headers: |
-#              {
-#              "Authorization":"Basic ZTg2MTczNjQ5NjY1MjNhZDI2MmQ0OGVmYjZlNjgxMzkzY2VhMGEyMTo="
-#              }
-#            urlSuffix: '/qualitygates/project_status?projectKey=AndyWardUST_nodejsdock&organization=andywardust'
-#            waitForCompletion: 'true'
