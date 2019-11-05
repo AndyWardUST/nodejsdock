@@ -73,14 +73,6 @@ stages:
 #            urlSuffix: '/qualitygates/project_status?projectKey=AndyWardUST_nodejsdock&organization=andywardust'
 #            waitForCompletion: 'true'
 
-        - task: InvokeRESTAPI@1
-          inputs:
-            connectionType: 'connectedServiceName'
-            serviceConnection: 'TestGeneric'
-            method: 'GET'
-            headers: 
-            waitForCompletion: 'false'
-
         - script: |
             curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
             java -jar wss-unified-agent.jar
