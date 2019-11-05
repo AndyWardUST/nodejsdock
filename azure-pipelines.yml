@@ -161,6 +161,7 @@ stages:
             script: |
               sudo ls
               sudo docker images
+              sudo export TESTERVAR="test value"
 
         - task: ArtifactoryDocker@1
           inputs:
