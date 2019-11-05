@@ -68,7 +68,24 @@ stages:
             npm run-script build
           displayName: 'npm test and build'
 
-
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              $token = [System.Text.Encoding]::UTF8.GetBytes("e8617364966523ad262d48efb6e681393cea0a21:")
+              $base64 = [System.Convert]::ToBase64String($token)
+               
+              $basicAuth = [string]::Format("Basic {0}", $base64)
+              $headers = @{ Authorization = $basicAuth }
+               
+              $result = Invoke-RestMethod -Method Get -Uri https://sonarcloud.io/api/qualitygates/project_status?qualitygates/project_status?projectKey=AndyWardUST_nodejsdock&organization=andywardust -Headers $headers
+              $result | ConvertTo-Json | Write-Host
+               
+              if ($result.projectStatus.status -eq "OK") {
+              Write-Host "Quality Gate Succeeded"
+              }else{
+              throw "Quality gate failed"
+              }
 #
 # This will not work without IP resolution to Schroders being fixed
 #    - job: Checkmarx
@@ -161,21 +178,21 @@ stages:
             DeployToEnvironment: 'Environments-1'
             DeploymentProgress: true
 
-- stage: Gather
-  displayName: Gather Results
-  dependsOn: Build
-  jobs:
-    - job: getSonarAPI
-      pool: server
-      steps:
-        - task: InvokeRESTAPI@1
-          inputs:
-            connectionType: 'connectedServiceName'
-            serviceConnection: 'SonarCloudAPI'
-            method: 'GET'
-            headers: |
-              {
-              "Authorization":"Basic ZTg2MTczNjQ5NjY1MjNhZDI2MmQ0OGVmYjZlNjgxMzkzY2VhMGEyMTo="
-              }
-            urlSuffix: '/qualitygates/project_status?projectKey=AndyWardUST_nodejsdock&organization=andywardust'
-            waitForCompletion: 'true'
+#- stage: Gather
+#  displayName: Gather Results
+#  dependsOn: Build
+#  jobs:
+#    - job: getSonarAPI
+#      pool: server
+#      steps:
+#        - task: InvokeRESTAPI@1
+#          inputs:
+#            connectionType: 'connectedServiceName'
+#            serviceConnection: 'SonarCloudAPI'
+#            method: 'GET'
+#            headers: |
+#              {
+#              "Authorization":"Basic ZTg2MTczNjQ5NjY1MjNhZDI2MmQ0OGVmYjZlNjgxMzkzY2VhMGEyMTo="
+#              }
+#            urlSuffix: '/qualitygates/project_status?projectKey=AndyWardUST_nodejsdock&organization=andywardust'
+#            waitForCompletion: 'true'
