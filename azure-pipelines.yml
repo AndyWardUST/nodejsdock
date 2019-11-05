@@ -190,6 +190,8 @@ stages:
   displayName: Push Results
   dependsOn: Gather
   jobs:
+    - job: PushBuildResults
+      steps:
         - task: ArtifactoryPublishBuildInfo@1
           inputs:
             artifactoryService: 'jFrog'
