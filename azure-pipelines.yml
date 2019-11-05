@@ -61,17 +61,19 @@ stages:
           inputs:
             pollingTimeoutSec: '180'
 
-        - task: InvokeRESTAPI@1
-          inputs:
-            connectionType: 'connectedServiceName'
-            serviceConnection: 'SonarCloudAPI'
-            method: 'GET'
-            headers: |
-              {
-              "Authorization":"Basic ZTg2MTczNjQ5NjY1MjNhZDI2MmQ0OGVmYjZlNjgxMzkzY2VhMGEyMTo="
-              }
-            urlSuffix: '/qualitygates/project_status?projectKey=AndyWardUST_nodejsdock&organization=andywardust'
-            waitForCompletion: 'true'
+#        - task: InvokeRESTAPI@1
+#          inputs:
+#            connectionType: 'connectedServiceName'
+#            serviceConnection: 'SonarCloudAPI'
+#            method: 'GET'
+#            headers: |
+#              {
+#              "Authorization":"Basic ZTg2MTczNjQ5NjY1MjNhZDI2MmQ0OGVmYjZlNjgxMzkzY2VhMGEyMTo="
+#              }
+#            urlSuffix: '/qualitygates/project_status?projectKey=AndyWardUST_nodejsdock&organization=andywardust'
+#            waitForCompletion: 'true'
+
+        
 
         - script: |
             curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
