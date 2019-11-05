@@ -186,6 +186,15 @@ stages:
               throw "Quality gate failed"
               }
 
+- stage: Push
+  displayName: Push Results
+  dependsOn: Gather
+  jobs:
+        - task: ArtifactoryPublishBuildInfo@1
+          inputs:
+            artifactoryService: 'jFrog'
+            buildName: '$(Build.DefinitionName)'
+            buildNumber: '$(Build.BuildNumber)'
 
 #      pool: server
 #      steps:
