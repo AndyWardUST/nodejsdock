@@ -131,6 +131,32 @@ stages:
             complianceThreshold: 'critical'
             artifact: '$(imageRepository):$(tag)'
 
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              $token = [System.Text.Encoding]::UTF8.GetBytes("e8617364966523ad262d48efb6e681393cea0a21:")
+              $base64 = [System.Convert]::ToBase64String($token)
+
+              $basicAuth = [string]::Format("Basic {0}", $base64)
+              $headers = @{ Authorization = $basicAuth }
+
+              $result = Invoke-RestMethod -Method Get -Uri 'https://sonarcloud.io/api/qualitygates/project_status?projectKey=AndyWardUST_nodejsdock&organization=andywardust' -Headers $headers
+              $result | ConvertTo-Json | Write-Host
+
+              if ($result.projectStatus.status -eq "OK") {
+              Write-Host "Quality Gate Succeeded"
+              echo "##vso[task.setvariable variable=sonarGateVar;isOutput=true]Quality Gate Succeeded"
+              }else{
+              throw "Quality gate failed"
+              }
+
+        - task: ArtifactoryPublishBuildInfo@1
+          inputs:
+            artifactoryService: 'jFrog'
+            buildName: '$(Build.DefinitionName)'
+            buildNumber: '$(Build.BuildNumber)'
+
 #        - upload: manifests
 #          artifact: manifests
 
@@ -160,43 +186,20 @@ stages:
 #            DeployToEnvironment: 'Environments-1'
 #            DeploymentProgress: true
 
-- stage: Gather
-  displayName: Gather Results
-  dependsOn: Build
-  jobs:
-    - job: getSonarAPI
-      steps:
-        - task: PowerShell@2
-          inputs:
-            targetType: 'inline'
-            script: |
-              $token = [System.Text.Encoding]::UTF8.GetBytes("e8617364966523ad262d48efb6e681393cea0a21:")
-              $base64 = [System.Convert]::ToBase64String($token)
+#- stage: Gather
+#  displayName: Gather Results
+#  dependsOn: Build
+#  jobs:
+#    - job: getSonarAPI
+#      steps:
 
-              $basicAuth = [string]::Format("Basic {0}", $base64)
-              $headers = @{ Authorization = $basicAuth }
+#- stage: Push
+#  displayName: Push Results
+#  dependsOn: Gather
+#  jobs:
+#    - job: PushBuildResults
+#      steps:
 
-              $result = Invoke-RestMethod -Method Get -Uri 'https://sonarcloud.io/api/qualitygates/project_status?projectKey=AndyWardUST_nodejsdock&organization=andywardust' -Headers $headers
-              $result | ConvertTo-Json | Write-Host
-
-              if ($result.projectStatus.status -eq "OK") {
-              Write-Host "Quality Gate Succeeded"
-              echo "##vso[task.setvariable variable=sonarGateVar;isOutput=true]Quality Gate Succeeded"
-              }else{
-              throw "Quality gate failed"
-              }
-
-- stage: Push
-  displayName: Push Results
-  dependsOn: Gather
-  jobs:
-    - job: PushBuildResults
-      steps:
-        - task: ArtifactoryPublishBuildInfo@1
-          inputs:
-            artifactoryService: 'jFrog'
-            buildName: '$(Build.DefinitionName)'
-            buildNumber: '$(Build.BuildNumber)'
 
 #      pool: server
 #      steps:
