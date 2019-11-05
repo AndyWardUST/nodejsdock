@@ -121,7 +121,6 @@ stages:
               sudo mv $(System.DefaultWorkingDirectory)/twistcli /usr/bin/twistcli
               sudo chmod +x /usr/bin/twistcli
 
-# This will fail until CVE in base docker image is resolved
         - task: twistcli-scan@1
           inputs:
             scanType: 'images'
@@ -166,7 +165,6 @@ stages:
   dependsOn: Build
   jobs:
     - job: getSonarAPI
-#      pool: server
       steps:
         - task: PowerShell@2
           inputs:
@@ -183,10 +181,14 @@ stages:
 
               if ($result.projectStatus.status -eq "OK") {
               Write-Host "Quality Gate Succeeded"
+              echo "##vso[task.setvariable variable=sonarGateVar;isOutput=true]Quality Gate Succeeded"
               }else{
               throw "Quality gate failed"
               }
 
+
+#      pool: server
+#      steps:
 #        - task: InvokeRESTAPI@1
 #          inputs:
 #            connectionType: 'connectedServiceName'
