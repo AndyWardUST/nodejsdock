@@ -88,6 +88,17 @@ stages:
             npm run-script build
           displayName: 'npm test and build'
 
+    - job: getSonarAPI
+      pool: server
+      steps:
+        - task: InvokeRESTAPI@1
+          inputs:
+            connectionType: 'connectedServiceName'
+            serviceConnection: 'TestGeneric'
+            method: 'GET'
+            headers:
+            waitForCompletion: 'false'
+#
 # This will not work without IP resolution to Schroders being fixed
 #    - job: Checkmarx
 #      pool:
