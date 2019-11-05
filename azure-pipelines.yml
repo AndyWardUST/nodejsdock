@@ -166,7 +166,7 @@ stages:
   dependsOn: Build
   jobs:
     - job: getSonarAPI
-      pool: server
+#      pool: server
       steps:
         - task: PowerShell@2
           inputs:
