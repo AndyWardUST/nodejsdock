@@ -70,7 +70,7 @@ stages:
               {
               "Authorization":"Basic ZTg2MTczNjQ5NjY1MjNhZDI2MmQ0OGVmYjZlNjgxMzkzY2VhMGEyMTo="
               }
-            urlSuffix: 'qualitygates/project_status?projectKey=AndyWardUST_nodejsdock&organization=andywardust'
+            urlSuffix: '/qualitygates/project_status?projectKey=AndyWardUST_nodejsdock&organization=andywardust'
             waitForCompletion: 'true'
 
         - script: |
