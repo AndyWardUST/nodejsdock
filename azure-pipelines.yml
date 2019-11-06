@@ -64,11 +64,16 @@ stages:
 
         - script: |
             curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
-            java -jar wss-unified-agent.jar
-            npm test
-            npm run-script build
-          displayName: 'npm test and build'
 
+        - task: Npm@1
+          inputs:
+            command: 'test'
+            workingDir: '/'
+
+        - task: Npm@1
+          inputs:
+            command: 'build'
+            workingDir: '/'
 
 #
 # This will not work without IP resolution to Schroders being fixed
