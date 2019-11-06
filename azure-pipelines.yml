@@ -76,7 +76,7 @@ stages:
           displayName: mocha test
 
         - script: |
-            npm run-script build
+            npm run build
           displayName: npm build
 
         - script: |
