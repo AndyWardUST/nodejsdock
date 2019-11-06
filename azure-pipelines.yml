@@ -146,12 +146,12 @@ stages:
 #        - upload: manifests
 #          artifact: manifests
 
-- stage: Gather
-  displayName: Gather Results
-  dependsOn: Build
-  jobs:
-    - job: getSonarAPI
-      steps:
+#- stage: Gather
+#  displayName: Gather Results
+#  dependsOn: Build
+#  jobs:
+#    - job: getSonarAPI
+#      steps:
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
@@ -172,12 +172,12 @@ stages:
               throw "Quality gate failed"
               }
 
-- stage: Push
-  displayName: Push Results
-  dependsOn: Gather
-  jobs:
-    - job: PushBuildResults
-      steps:
+#- stage: Push
+#  displayName: Push Results
+#  dependsOn: Gather
+#  jobs:
+#    - job: PushBuildResults
+#      steps:
         - task: ArtifactoryPublishBuildInfo@1
           inputs:
             artifactoryService: 'jFrog'
