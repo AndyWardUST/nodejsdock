@@ -99,8 +99,6 @@ stages:
   jobs:
     - job: Build
       displayName: Build
-      pool:
-        vmImage: $(vmImageName)
       steps:
         - task: ArtifactoryDocker@1
           inputs:
@@ -116,20 +114,20 @@ stages:
             Dockerfile: '$(dockerfilePath)'
             tags: '$(tag)'
 
-        - task: UniversalPackages@0
-          inputs:
-            command: 'download'
-            downloadDirectory: '$(System.DefaultWorkingDirectory)'
-            feedsToUse: 'internal'
-            vstsFeed: 'd09b6095-5d34-406d-8b60-54c555945e9a'
-            vstsFeedPackage: '819e5519-79bf-4056-8920-f8c9bd51212c'
-            vstsPackageVersion: '19.3.311'
+#        - task: UniversalPackages@0
+#          inputs:
+#            command: 'download'
+#            downloadDirectory: '$(System.DefaultWorkingDirectory)'
+#            feedsToUse: 'internal'
+#            vstsFeed: 'd09b6095-5d34-406d-8b60-54c555945e9a'
+#            vstsFeedPackage: '819e5519-79bf-4056-8920-f8c9bd51212c'
+#            vstsPackageVersion: '19.3.311'
 
-        - task: CmdLine@2
-          inputs:
-            script: |
-              sudo mv $(System.DefaultWorkingDirectory)/twistcli /usr/bin/twistcli
-              sudo chmod +x /usr/bin/twistcli
+#        - task: CmdLine@2
+#          inputs:
+#            script: |
+#              sudo mv $(System.DefaultWorkingDirectory)/twistcli /usr/bin/twistcli
+#              sudo chmod +x /usr/bin/twistcli
 
         - task: twistcli-scan@1
           inputs:
