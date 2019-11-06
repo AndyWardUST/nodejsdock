@@ -68,16 +68,17 @@ stages:
             dir node_modules\.bin
 
         - script: |
-            curl -O https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar wss-unified-agent.jar
-
-        - script: |
             node_modules\.bin\mocha.cmd
+          displayName: mocha test
 
         - script: |
-            npm build
+            npm run-script build
+          displayName: npm build
 
         - script: |
+            curl -O https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar wss-unified-agent.jar
             java -jar wss-unified-agent.jar
+          displayName: whitesource test
 
 #
 # This will not work without IP resolution to Schroders being fixed

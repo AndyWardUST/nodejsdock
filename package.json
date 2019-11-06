@@ -13,11 +13,11 @@
     "sonar-scanner-lin": "node_modules/sonar-scanner/bin/sonar-scanner"
   },
   "dependencies": {
+    "mocha": "6.2.1",
     "express": "^4.16.1",
     "save-dev": "0.0.1-security"
   },
   "devDependencies": {
-    "mocha": "6.2.1",
     "sonar-scanner": "^3.1.0"
   }
 }
