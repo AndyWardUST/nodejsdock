@@ -142,11 +142,7 @@ stages:
             buildNumber: '$(Build.BuildNumber)'
             includeEnvVars: true
 
-        - task: ArtifactoryPublishBuildInfo@1
-          inputs:
-            artifactoryService: 'jFrog'
-            buildName: '$(Build.DefinitionName)'
-            buildNumber: '$(Build.BuildNumber)'
+
 #        - upload: manifests
 #          artifact: manifests
 
@@ -176,13 +172,17 @@ stages:
               throw "Quality gate failed"
               }
 
-#- stage: Push
-#  displayName: Push Results
-#  dependsOn: Gather
-#  jobs:
-#    - job: PushBuildResults
-#      steps:
-
+- stage: Push
+  displayName: Push Results
+  dependsOn: Gather
+  jobs:
+    - job: PushBuildResults
+      steps:
+        - task: ArtifactoryPublishBuildInfo@1
+          inputs:
+            artifactoryService: 'jFrog'
+            buildName: '$(Build.DefinitionName)'
+            buildNumber: '$(Build.BuildNumber)'
 
 #        - task: OctopusCreateRelease@4
 #          inputs:
