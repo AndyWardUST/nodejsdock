@@ -155,26 +155,26 @@ stages:
 #  jobs:
 #    - job: getSonarAPI
 #      steps:
-        - task: PowerShell@2
-          inputs:
-            targetType: 'inline'
-            script: |
-              $token = [System.Text.Encoding]::UTF8.GetBytes("e8617364966523ad262d48efb6e681393cea0a21:")
-              $base64 = [System.Convert]::ToBase64String($token)
+#        - task: PowerShell@2
+#          inputs:
+#            targetType: 'inline'
+#            script: |
+#              $token = [System.Text.Encoding]::UTF8.GetBytes("e8617364966523ad262d48efb6e681393cea0a21:")
+#              $base64 = [System.Convert]::ToBase64String($token)
 
-              $basicAuth = [string]::Format("Basic {0}", $base64)
-              $headers = @{ Authorization = $basicAuth }
+#              $basicAuth = [string]::Format("Basic {0}", $base64)
+#              $headers = @{ Authorization = $basicAuth }
 
-              $result = Invoke-RestMethod -Method Get -Uri 'https://sonarcloud.io/api/qualitygates/project_status?projectKey=AndyWardUST_nodejsdock&organization=andywardust' -Headers $headers
-              $result | ConvertTo-Json | Write-Host
+#              $result = Invoke-RestMethod -Method Get -Uri 'https://sonarcloud.io/api/qualitygates/project_status?projectKey=AndyWardUST_nodejsdock&organization=andywardust' -Headers $headers
+#              $result | ConvertTo-Json | Write-Host
 
-              if ($result.projectStatus.status -eq "OK") {
-              Write-Host "Quality Gate Succeeded"
-              Write-Host "##vso[task.setvariable variable=SonarGateVar;isOutput=true]Quality Gate Succeeded"
-              Write-Host "Set environment variable to $($env:SonarGateVar)"
-              }else{
-              throw "Quality gate failed"
-              }
+#              if ($result.projectStatus.status -eq "OK") {
+#              Write-Host "Quality Gate Succeeded"
+#              Write-Host "##vso[task.setvariable variable=SonarGateVar;isOutput=true]Quality Gate Succeeded"
+#              Write-Host "Set environment variable to $($env:SonarGateVar)"
+#              }else{
+#              throw "Quality gate failed"
+#              }
 
 #- stage: Push
 #  displayName: Push Results
