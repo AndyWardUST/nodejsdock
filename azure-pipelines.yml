@@ -63,17 +63,16 @@ stages:
             pollingTimeoutSec: '180'
 
         - script: |
-            curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
+            curl -O https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar wss-unified-agent.jar
 
-        - task: Npm@1
-          inputs:
-            command: 'test'
-            workingDir: '/'
+        - script: |
+            npm test
 
-        - task: Npm@1
-          inputs:
-            command: 'build'
-            workingDir: '/'
+        - script: |
+            npm build
+
+        - script: |
+            java -jar wss-unified-agent.jar
 
 #
 # This will not work without IP resolution to Schroders being fixed
