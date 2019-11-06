@@ -63,7 +63,7 @@ stages:
             pollingTimeoutSec: '180'
 
         - script: |
-            ls
+            dir
 
         - script: |
             curl -O https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar wss-unified-agent.jar
