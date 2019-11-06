@@ -63,6 +63,10 @@ stages:
             pollingTimeoutSec: '180'
 
         - script: |
+            npm install
+          displayName: npm install
+
+        - script: |
             dir
             dir node_modules
             dir node_modules\.bin
