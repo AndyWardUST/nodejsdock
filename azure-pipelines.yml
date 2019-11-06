@@ -11,6 +11,7 @@ variables:
 
   imageRepository: 'ustpoc-docker-local.jfrog.io/nodesjsdock'
   dockerfilePath: 'Dockerfile'
+  SonarGateVar: 'Not Set'
   tag: '$(Build.BuildId)'
 
   # Agent VM image name
@@ -167,8 +168,8 @@ stages:
 
               if ($result.projectStatus.status -eq "OK") {
               Write-Host "Quality Gate Succeeded"
-              Write-Host "##vso[task.setvariable variable=sonarGateVar;isOutput=true]Quality Gate Succeeded"
-              Write-Host "Set environment variable to ($env:sonarGateVar)"
+              Write-Host "##vso[task.setvariable variable=SonarGateVar;isOutput=true]Quality Gate Succeeded"
+              Write-Host "Set environment variable to $($env:SonarGateVar)"
               }else{
               throw "Quality gate failed"
               }
