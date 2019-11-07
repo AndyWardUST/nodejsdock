@@ -91,7 +91,7 @@ stages:
 
 - stage: Build
   displayName: Build Stage
-  dependsOn: Check
+  dependsOn: CheckMarx
   jobs:
     - job: Build
       displayName: Build
