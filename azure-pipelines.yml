@@ -190,11 +190,11 @@ stages:
             buildName: '$(Build.DefinitionName)'
             buildNumber: '$(Build.BuildNumber)'
 
-#        - task: OctopusCreateRelease@4
-#          inputs:
-#            OctoConnectedServiceName: 'OctopusDeploy'
-#            Space: 'Spaces-1'
-#            ProjectName: 'Projects-1'
-#            Channel: 'Channels-1'
-#            DeployToEnvironment: 'Environments-1'
-#            DeploymentProgress: true
+        - task: OctopusCreateRelease@4
+          inputs:
+            OctoConnectedServiceName: 'OctopusDeploy'
+            Space: 'Spaces-1'
+            ProjectName: 'Projects-1'
+            Channel: 'Channels-1'
+            DeployToEnvironment: 'Environments-1'
+            DeploymentProgress: true
