@@ -1,8 +1,8 @@
 trigger:
 - master
 
-pool: Default
-#  vmImage: Default
+pool:
+  vmImage: 'ubuntu-latest'
 
 resources:
   - repo: self
@@ -11,7 +11,6 @@ variables:
 
   imageRepository: 'ustpoc-docker-local.jfrog.io/nodesjsdock'
   dockerfilePath: 'Dockerfile'
-  SonarGateVar: 'Not Set'
   tag: '$(Build.BuildId)'
 
   # Agent VM image name
@@ -63,23 +62,19 @@ stages:
             pollingTimeoutSec: '180'
 
         - script: |
-            npm install
-          displayName: npm install
-
-        - script: |
-            npm test
-          displayName: mocha test
-
-        - script: |
-            npm run build
-          displayName: npm build
-
-        - script: |
             curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
             java -jar wss-unified-agent.jar
-          displayName: whitesource test
+            npm test
+            npm run-script build
+          displayName: 'npm test and build'
 
+
+#
 # This will not work without IP resolution to Schroders being fixed
+#    - job: Checkmarx
+#      pool:
+#        vmImage: 'windows-latest'
+#      steps:
 #        - task: Security static source code analysis@88
 #          inputs:
 #            CheckmarxService: 'CheeckMarxSchroders'
@@ -94,6 +89,8 @@ stages:
   jobs:
     - job: Build
       displayName: Build
+      pool:
+        vmImage: $(vmImageName)
       steps:
         - task: ArtifactoryDocker@1
           inputs:
@@ -109,20 +106,20 @@ stages:
             Dockerfile: '$(dockerfilePath)'
             tags: '$(tag)'
 
-#        - task: UniversalPackages@0
-#          inputs:
-#            command: 'download'
-#            downloadDirectory: '$(System.DefaultWorkingDirectory)'
-#            feedsToUse: 'internal'
-#            vstsFeed: 'd09b6095-5d34-406d-8b60-54c555945e9a'
-#            vstsFeedPackage: '819e5519-79bf-4056-8920-f8c9bd51212c'
-#            vstsPackageVersion: '19.3.311'
+        - task: UniversalPackages@0
+          inputs:
+            command: 'download'
+            downloadDirectory: '$(System.DefaultWorkingDirectory)'
+            feedsToUse: 'internal'
+            vstsFeed: 'd09b6095-5d34-406d-8b60-54c555945e9a'
+            vstsFeedPackage: '819e5519-79bf-4056-8920-f8c9bd51212c'
+            vstsPackageVersion: '19.3.311'
 
-#        - task: CmdLine@2
-#          inputs:
-#            script: |
-#              sudo mv $(System.DefaultWorkingDirectory)/twistcli /usr/bin/twistcli
-#              sudo chmod +x /usr/bin/twistcli
+        - task: CmdLine@2
+          inputs:
+            script: |
+              sudo mv $(System.DefaultWorkingDirectory)/twistcli /usr/bin/twistcli
+              sudo chmod +x /usr/bin/twistcli
 
         - task: twistcli-scan@1
           inputs:
@@ -155,26 +152,25 @@ stages:
 #  jobs:
 #    - job: getSonarAPI
 #      steps:
-#        - task: PowerShell@2
-#          inputs:
-#            targetType: 'inline'
-#            script: |
-#              $token = [System.Text.Encoding]::UTF8.GetBytes("e8617364966523ad262d48efb6e681393cea0a21:")
-#              $base64 = [System.Convert]::ToBase64String($token)
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              $token = [System.Text.Encoding]::UTF8.GetBytes("e8617364966523ad262d48efb6e681393cea0a21:")
+              $base64 = [System.Convert]::ToBase64String($token)
 
-#              $basicAuth = [string]::Format("Basic {0}", $base64)
-#              $headers = @{ Authorization = $basicAuth }
+              $basicAuth = [string]::Format("Basic {0}", $base64)
+              $headers = @{ Authorization = $basicAuth }
 
-#              $result = Invoke-RestMethod -Method Get -Uri 'https://sonarcloud.io/api/qualitygates/project_status?projectKey=AndyWardUST_nodejsdock&organization=andywardust' -Headers $headers
-#              $result | ConvertTo-Json | Write-Host
+              $result = Invoke-RestMethod -Method Get -Uri 'https://sonarcloud.io/api/qualitygates/project_status?projectKey=AndyWardUST_nodejsdock&organization=andywardust' -Headers $headers
+              $result | ConvertTo-Json | Write-Host
 
-#              if ($result.projectStatus.status -eq "OK") {
-#              Write-Host "Quality Gate Succeeded"
-#              Write-Host "##vso[task.setvariable variable=SonarGateVar;isOutput=true]Quality Gate Succeeded"
-#              Write-Host "Set environment variable to $($env:SonarGateVar)"
-#              }else{
-#              throw "Quality gate failed"
-#              }
+              if ($result.projectStatus.status -eq "OK") {
+              Write-Host "Quality Gate Succeeded"
+              echo "##vso[task.setvariable variable=sonarGateVar;isOutput=true]Quality Gate Succeeded"
+              }else{
+              throw "Quality gate failed"
+              }
 
 #- stage: Push
 #  displayName: Push Results
