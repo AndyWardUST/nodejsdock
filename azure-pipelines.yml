@@ -89,6 +89,12 @@ stages:
             fullTeamName: 'CxServer\ASA\UST-Global\UST-POC'
             incScan: true
 
+    - task: Bash@3
+          input:
+            targetType: 'inline'
+            script: |
+              echo 'hello world'
+
 - stage: Build
   displayName: Build Stage
   dependsOn: CheckMarx
