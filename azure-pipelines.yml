@@ -71,33 +71,27 @@ stages:
 
 #
 # This will not work without IP resolution to Schroders being fixed
-- stage: CheckMarx
-  displayName: CheckMarx Stage
-  dependsOn: Check
-  jobs:
-    - job: Checkmarx
-      pool: Default
-      steps:
-        - script: |
-            curl http://ifconfig.co
-
-        - task: Security static source code analysis@88
-          inputs:
-            CheckmarxService: 'CheeckMarxSchroders'
-            projectName: 'nodejsdock'
-            preset: 'Checkmarx Default'
-            fullTeamName: 'CxServer\ASA\UST-Global\UST-POC'
-            incScan: true
-
-    - task: Bash@3
-          input:
-            targetType: 'inline'
-            script: |
-              echo 'hello world'
+#- stage: CheckMarx
+#  displayName: CheckMarx Stage
+#  dependsOn: Check
+#  jobs:
+#    - job: Checkmarx
+#      pool: Default
+#      steps:
+#        - script: |
+#            curl http://ifconfig.co
+#
+#        - task: Security static source code analysis@88
+#          inputs:
+#            CheckmarxService: 'CheeckMarxSchroders'
+#            projectName: 'nodejsdock'
+#            preset: 'Checkmarx Default'
+#            fullTeamName: 'CxServer\ASA\UST-Global\UST-POC'
+#            incScan: true
 
 - stage: Build
   displayName: Build Stage
-  dependsOn: CheckMarx
+  dependsOn: Check
   jobs:
     - job: Build
       displayName: Build
