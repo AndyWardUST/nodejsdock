@@ -1,8 +1,6 @@
 trigger:
 - master
 
-pool: 'Default'
-
 resources:
   - repo: self
 
@@ -11,12 +9,10 @@ variables:
   dockerfilePath: 'Dockerfile'
   tag: '$(Build.BuildId)'
 
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
-
 stages:
-- stage: Import
-  displayName: Import Requirements
+- stage: Node Build and Test
+  displayName: Node Built and Test
+  pool: 'Node Pool'
   jobs:
     - job: Import
       displayName: jFrog Import
@@ -28,25 +24,6 @@ stages:
           inputs:
             version: '12.13.0'
             checkLatest: true
-
-#        - task: ArtifactoryNpm@1
-#          displayName: Install NPM from Artifactory
-#          inputs:
-#            command: 'install'
-#            artifactoryService: 'jFrog'
-#            sourceRepo: 'npm'
-#            workingFolder: '$(System.DefaultWorkingDirectory)'
-#            collectBuildInfo: true
-#            threads: '1'
-#            buildName: '$(Build.DefinitionName)'
-#            buildNumber: '$(Build.BuildNumber)'
-#            includeEnvVars: true
-
-#        - task: ArtifactoryToolsInstaller@1
-#          displayName: Install jFrog Client from Artifactory
-#          inputs:
-#            artifactoryService: 'jFrog'
-#            cliInstallationRepo: 'jfrog-cli'
 
         - task: Npm@1
           inputs:
@@ -92,7 +69,8 @@ stages:
               }
 
 - stage: Build
-  displayName: Build Stage
+  displayName: Build Stage with Docker
+  pool: 'Docker Pool'
   jobs:
     - job: Build
       displayName: Build
