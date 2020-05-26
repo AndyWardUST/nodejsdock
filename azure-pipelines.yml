@@ -7,8 +7,7 @@ resources:
   - repo: self
 
 variables:
-
-  imageRepository: 'ustpoc-docker-local.jfrog.io/nodesjsdock'
+  imageRepository: 'nodesjsdock'
   dockerfilePath: 'Dockerfile'
   tag: '$(Build.BuildId)'
 
@@ -91,3 +90,16 @@ stages:
               }else{
               throw "Quality gate failed"
               }
+
+- stage: Build
+  displayName: Build Stage
+  jobs:
+    - job: Build
+      displayName: Build
+      steps:
+        - task: Docker@2
+          inputs:
+            repository: $(imageRepository)
+            command: 'build'
+            Dockerfile: '$(dockerfilePath)'
+            tags: '$(tag)'
