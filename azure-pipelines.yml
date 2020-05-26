@@ -25,6 +25,15 @@ stages:
         - script: |
             echo "Running jFrog setups"
 
+        - task: UseNode@1
+          inputs:
+            version: '12.13.0'
+            checkLatest: true
+
+        - task: Npm@1
+          inputs:
+            command: 'install'
+
 #        - task: ArtifactoryNpm@1
 #          displayName: Install NPM from Artifactory
 #          inputs:
