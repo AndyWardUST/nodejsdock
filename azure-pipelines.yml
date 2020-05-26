@@ -1,8 +1,7 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
+pool: 'Default'
 
 resources:
   - repo: self
@@ -23,24 +22,27 @@ stages:
     - job: Import
       displayName: jFrog Import
       steps:
-        - task: ArtifactoryNpm@1
-          displayName: Install NPM from Artifactory
-          inputs:
-            command: 'install'
-            artifactoryService: 'jFrog'
-            sourceRepo: 'npm'
-            workingFolder: '$(System.DefaultWorkingDirectory)'
-            collectBuildInfo: true
-            threads: '1'
-            buildName: '$(Build.DefinitionName)'
-            buildNumber: '$(Build.BuildNumber)'
-            includeEnvVars: true
+        - script: |
+            echo "Running jFrog setups"
 
-        - task: ArtifactoryToolsInstaller@1
-          displayName: Install jFrog Client from Artifactory
-          inputs:
-            artifactoryService: 'jFrog'
-            cliInstallationRepo: 'jfrog-cli'
+#        - task: ArtifactoryNpm@1
+#          displayName: Install NPM from Artifactory
+#          inputs:
+#            command: 'install'
+#            artifactoryService: 'jFrog'
+#            sourceRepo: 'npm'
+#            workingFolder: '$(System.DefaultWorkingDirectory)'
+#            collectBuildInfo: true
+#            threads: '1'
+#            buildName: '$(Build.DefinitionName)'
+#            buildNumber: '$(Build.BuildNumber)'
+#            includeEnvVars: true
+
+#        - task: ArtifactoryToolsInstaller@1
+#          displayName: Install jFrog Client from Artifactory
+#          inputs:
+#            artifactoryService: 'jFrog'
+#            cliInstallationRepo: 'jfrog-cli'
 
 - stage: Check
   displayName: Check Stage
@@ -62,102 +64,11 @@ stages:
             pollingTimeoutSec: '180'
 
         - script: |
-            curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
-            java -jar wss-unified-agent.jar
             npm test
             npm run-script build
           displayName: 'npm test and build'
 
 
-#
-# This will not work without IP resolution to Schroders being fixed
-#- stage: CheckMarx
-#  displayName: CheckMarx Stage
-#  dependsOn: Check
-#  jobs:
-#    - job: Checkmarx
-#      pool: Default
-#      steps:
-#        - script: |
-#            curl http://ifconfig.co
-#
-#        - task: Security static source code analysis@88
-#          inputs:
-#            CheckmarxService: 'CheeckMarxSchroders'
-#            projectName: 'nodejsdock'
-#            preset: 'Checkmarx Default'
-#            fullTeamName: 'CxServer\ASA\UST-Global\UST-POC'
-#            incScan: true
-
-- stage: Build
-  displayName: Build Stage
-  dependsOn: Check
-  jobs:
-    - job: Build
-      displayName: Build
-      pool:
-        vmImage: $(vmImageName)
-      steps:
-        - task: ArtifactoryDocker@1
-          inputs:
-            command: 'pull'
-            artifactoryService: 'jFrog'
-            sourceRepo: 'docker'
-            imageName: 'ustpoc-docker.jfrog.io/node:latest'
-
-        - task: Docker@2
-          inputs:
-            repository: $(imageRepository)
-            command: 'build'
-            Dockerfile: '$(dockerfilePath)'
-            tags: '$(tag)'
-
-        - task: UniversalPackages@0
-          inputs:
-            command: 'download'
-            downloadDirectory: '$(System.DefaultWorkingDirectory)'
-            feedsToUse: 'internal'
-            vstsFeed: 'd09b6095-5d34-406d-8b60-54c555945e9a'
-            vstsFeedPackage: '819e5519-79bf-4056-8920-f8c9bd51212c'
-            vstsPackageVersion: '19.3.311'
-
-        - task: CmdLine@2
-          inputs:
-            script: |
-              sudo mv $(System.DefaultWorkingDirectory)/twistcli /usr/bin/twistcli
-              sudo chmod +x /usr/bin/twistcli
-
-        - task: twistcli-scan@1
-          inputs:
-            scanType: 'images'
-            twistlockService: 'twistlock_cli'
-            vulnerabilityThreshold: 'critical'
-            onlyFixed: false
-            gracePeriod: '0'
-            complianceThreshold: 'critical'
-            artifact: '$(imageRepository):$(tag)'
-
-        - task: ArtifactoryDocker@1
-          inputs:
-            command: 'push'
-            artifactoryService: 'jFrog'
-            targetRepo: 'docker-local'
-            imageName: '$(imageRepository):$(tag)'
-            collectBuildInfo: true
-            buildName: '$(Build.DefinitionName)'
-            buildNumber: '$(Build.BuildNumber)'
-            includeEnvVars: true
-
-
-#        - upload: manifests
-#          artifact: manifests
-
-#- stage: Gather
-#  displayName: Gather Results
-#  dependsOn: Build
-#  jobs:
-#    - job: getSonarAPI
-#      steps:
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
@@ -177,39 +88,3 @@ stages:
               }else{
               throw "Quality gate failed"
               }
-
-#- stage: Push
-#  displayName: Push Results
-#  dependsOn: Gather
-#  jobs:
-#    - job: PushBuildResults
-#      steps:
-        - task: ArtifactoryPublishBuildInfo@1
-          inputs:
-            artifactoryService: 'jFrog'
-            buildName: '$(Build.DefinitionName)'
-            buildNumber: '$(Build.BuildNumber)'
-
-#        - task: OctopusCreateRelease@4
-#          inputs:
-#            OctoConnectedServiceName: 'OctopusDeploy'
-#            Space: 'Spaces-1'
-#            ProjectName: 'Projects-61'
-#            Channel: 'Channels-1'
-#            DeployToEnvironment: 'Environments-1'
-#            DeploymentProgress: true
-
-        - task: OctopusCreateRelease@4
-          inputs:
-            OctoConnectedServiceName: 'OctopusDeploy'
-            Space: 'Spaces-1'
-            ProjectName: 'Projects-61'
-            Channel: 'Channels-61'
-
-        - task: OctopusDeployRelease@4
-          inputs:
-            OctoConnectedServiceName: 'OctopusDeploy'
-            Space: 'Spaces-1'
-            Project: 'Projects-61'
-            ReleaseNumber: 'latest'
-            Environments: 'Environments-1'
