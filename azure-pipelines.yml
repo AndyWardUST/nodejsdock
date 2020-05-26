@@ -10,7 +10,7 @@ variables:
   tag: '$(Build.BuildId)'
 
 stages:
-- stage: Node Build and Test
+- stage: Node
   displayName: Node Built and Test
   pool: 'Node Pool'
   jobs:
