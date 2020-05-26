@@ -49,12 +49,6 @@ stages:
 #            artifactoryService: 'jFrog'
 #            cliInstallationRepo: 'jfrog-cli'
 
-- stage: Check
-  displayName: Check Stage
-  jobs:
-    - job: Check
-      displayName: Code Check
-      steps:
         - task: Npm@1
           inputs:
             command: 'install'
