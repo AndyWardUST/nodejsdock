@@ -38,9 +38,9 @@ stages:
 
         - task: SonarCloudAnalyze@1
 
-        - task: SonarCloudPublish@1
-          inputs:
-            pollingTimeoutSec: '180'
+        #- task: SonarCloudPublish@1
+        #  inputs:
+        #    pollingTimeoutSec: '180'
 
         - script: |
             npm test
