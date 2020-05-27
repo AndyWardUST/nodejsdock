@@ -70,7 +70,7 @@ stages:
 
 - stage: Build
   displayName: Build Stage with Docker
-  pool: 'Docker Pool'
+  pool: 'Node Pool'
   jobs:
     - job: Build
       displayName: Build
