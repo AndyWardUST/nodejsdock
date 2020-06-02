@@ -71,6 +71,7 @@ stages:
 - stage: Build
   displayName: Build Stage with Docker
   pool: 'Docker Pool'
+  dependsOn: []
   jobs:
     - job: Build
       displayName: Build
