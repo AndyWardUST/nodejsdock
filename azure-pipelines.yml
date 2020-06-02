@@ -47,7 +47,6 @@ stages:
             npm run-script build
           displayName: 'npm test and build'
 
-
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
@@ -67,6 +66,13 @@ stages:
               }else{
               throw "Quality gate failed"
               }
+
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              # Write your PowerShell commands here.
+              Write-Host "Hello World"
 
 - stage: Build
   displayName: Build Stage with Docker
