@@ -73,6 +73,7 @@ stages:
             script: |
               # Write your PowerShell commands here.
               Write-Host "Hello World"
+              gci env:* | sort-object name
 
 - stage: Build
   displayName: Build Stage with Docker
